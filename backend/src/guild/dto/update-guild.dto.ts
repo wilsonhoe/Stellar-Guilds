@@ -1,14 +1,28 @@
-import { IsString, IsOptional, MaxLength, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  MaxLength,
+  MinLength,
+  IsObject,
+  Matches,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class UpdateGuildDto {
   @IsOptional()
   @IsString()
+  @MinLength(1)
   @MaxLength(100)
   name?: string;
 
   @IsOptional()
   @IsString()
+  @MinLength(1)
   @MaxLength(100)
+  @Transform(({ value }) => value?.toLowerCase().trim())
+  @Matches(/^[a-z0-9-]+$/, {
+    message: 'slug must contain only lowercase letters, numbers, and hyphens',
+  })
   slug?: string;
 
   @IsOptional()
