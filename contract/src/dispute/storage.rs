@@ -1,4 +1,4 @@
-use soroban_sdk::{symbol_short, Address, Env, Map, Symbol};
+﻿use soroban_sdk::{symbol_short, Address, Env, Map, Symbol};
 
 use crate::dispute::types::{Dispute, DisputeReference, Vote};
 

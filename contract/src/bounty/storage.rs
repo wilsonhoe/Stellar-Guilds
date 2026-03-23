@@ -1,4 +1,4 @@
-use crate::bounty::types::Bounty;
+﻿use crate::bounty::types::Bounty;
 use soroban_sdk::{symbol_short, Env, Map, Symbol, Vec};
 
 // Storage keys

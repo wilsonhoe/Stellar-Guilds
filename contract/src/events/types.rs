@@ -1,4 +1,4 @@
-/// Standardized event types for the Stellar Guilds platform.
+﻿/// Standardized event types for the Stellar Guilds platform.
 ///
 /// Every event emitted across all contract modules is wrapped in a consistent
 /// `EventEnvelope` that carries versioning, timing, and correlation metadata.
@@ -31,11 +31,11 @@ pub const EVENT_SEQUENCE_KEY: &str = "evt_seq";
 /// Metadata attached to every event published by this contract.
 ///
 /// Fields:
-/// - `version`   — Schema version; allows consumers to detect envelope changes.
-/// - `timestamp` — Ledger timestamp at the moment of emission.
-/// - `module`    — The sub-module that produced the event (e.g. `"bounty"`).
-/// - `action`    — The specific action taken (e.g. `"created"`, `"funded"`).
-/// - `sequence`  — Monotonically increasing counter scoped to this contract.
+/// - `version`   â€” Schema version; allows consumers to detect envelope changes.
+/// - `timestamp` â€” Ledger timestamp at the moment of emission.
+/// - `module`    â€” The sub-module that produced the event (e.g. `"bounty"`).
+/// - `action`    â€” The specific action taken (e.g. `"created"`, `"funded"`).
+/// - `sequence`  â€” Monotonically increasing counter scoped to this contract.
 ///                 Useful for ordering events when multiple are emitted in one
 ///                 transaction and for detecting gaps in off-chain listeners.
 #[contracttype]

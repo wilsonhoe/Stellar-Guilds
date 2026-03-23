@@ -1,4 +1,4 @@
-//! Payment Distribution Contract Tests
+﻿//! Payment Distribution Contract Tests
 //!
 //! Comprehensive test coverage for payment pool creation, recipient management,
 //! validation, distribution execution, and batch operations.
@@ -20,7 +20,7 @@ fn setup_env() -> Env {
 fn register_and_init_contract(env: &Env) -> Address {
     let contract_id = env.register_contract(None, StellarGuildsContract);
     let client = StellarGuildsContractClient::new(env, &contract_id);
-    client.initialize();
+    client.initialize(&Address::generate(&env));
     contract_id
 }
 

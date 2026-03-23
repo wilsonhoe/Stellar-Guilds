@@ -1,4 +1,4 @@
-use crate::payment::types::{DistributionStatus, PaymentPool, Recipient};
+﻿use crate::payment::types::{DistributionStatus, PaymentPool, Recipient};
 use soroban_sdk::{contracttype, Address, Env, Vec};
 
 /// Storage key for the next pool ID counter

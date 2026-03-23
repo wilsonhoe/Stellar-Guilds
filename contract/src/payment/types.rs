@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String};
+﻿use soroban_sdk::{contracttype, Address, String};
 
 /// Distribution rule types
 #[contracttype]

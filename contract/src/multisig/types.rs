@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String, Vec};
+﻿use soroban_sdk::{contracttype, Address, String, Vec};
 
 pub const TIMEOUT_24H: u64 = 86_400;
 pub const TIMEOUT_48H: u64 = 172_800;

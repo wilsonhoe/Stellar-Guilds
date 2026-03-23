@@ -1,4 +1,4 @@
-#[cfg(test)]
+﻿#[cfg(test)]
 mod tests {
     use crate::allowance::management;
     use crate::allowance::types::{AllowanceError, AllowanceOperation};
@@ -22,7 +22,7 @@ mod tests {
 
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         let owner = Address::generate(&env);
         let spender = Address::generate(&env);
@@ -42,7 +42,7 @@ mod tests {
         });
     }
 
-    // ── Happy Path ───────────────────────────────────────────────────────
+    // â”€â”€ Happy Path â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_approve_and_spend() {
@@ -80,7 +80,7 @@ mod tests {
         assert_eq!(allowance.remaining(), 700);
     }
 
-    // ── Expiration ───────────────────────────────────────────────────────
+    // â”€â”€ Expiration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_expired_allowance_blocks_spend() {
@@ -138,7 +138,7 @@ mod tests {
         assert_eq!(result, Ok(()));
     }
 
-    // ── Revocation ───────────────────────────────────────────────────────
+    // â”€â”€ Revocation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_revoke_blocks_spend() {
@@ -168,7 +168,7 @@ mod tests {
         client.revoke_token_allowance(&owner, &spender, &None);
     }
 
-    // ── Over-spend ───────────────────────────────────────────────────────
+    // â”€â”€ Over-spend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_overspend_blocked() {
@@ -220,7 +220,7 @@ mod tests {
         assert_eq!(result2, Err(AllowanceError::InsufficientAllowance));
     }
 
-    // ── Per-Operation Filtering ──────────────────────────────────────────
+    // â”€â”€ Per-Operation Filtering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_operation_filter_blocks_wrong_type() {
@@ -312,7 +312,7 @@ mod tests {
         );
     }
 
-    // ── Increase / Decrease ──────────────────────────────────────────────
+    // â”€â”€ Increase / Decrease â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_increase_allowance() {
@@ -355,7 +355,7 @@ mod tests {
         assert_eq!(allowance.remaining(), 0);
     }
 
-    // ── Index Queries ────────────────────────────────────────────────────
+    // â”€â”€ Index Queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_list_by_owner() {
@@ -395,7 +395,7 @@ mod tests {
         assert_eq!(list.len(), 2);
     }
 
-    // ── Invalid Amount ───────────────────────────────────────────────────
+    // â”€â”€ Invalid Amount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     #[should_panic(expected = "invalid amount")]
@@ -411,7 +411,7 @@ mod tests {
         client.approve_token_allowance(&owner, &spender, &None, &-50, &0, &AllowanceOperation::Any);
     }
 
-    // ── Approve Replaces Existing ────────────────────────────────────────
+    // â”€â”€ Approve Replaces Existing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     #[test]
     fn test_approve_replaces_existing() {

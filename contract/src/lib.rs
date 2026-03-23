@@ -1,4 +1,4 @@
-#![no_std]
+﻿#![no_std]
 
 use soroban_sdk::{contract, contractimpl, Address, Env, String, Vec};
 
@@ -168,12 +168,25 @@ use proxy::types::ProxyConfig;
 /// - Event tracking for all state changes
 /// - Efficient on-chain storage management
 
+#[soroban_sdk::contracttype]
+pub enum DataKey {
+    Admin,
+    Initialized,
+}
+
 #[contract]
 pub struct StellarGuildsContract;
 
 #[contractimpl]
 impl StellarGuildsContract {
-    pub fn initialize(env: Env) -> bool {
+    pub fn initialize(env: Env, admin: Address) -> bool {
+        if env.storage().instance().has(&DataKey::Initialized) {
+            panic!("Already initialized");
+        }
+
+        env.storage().instance().set(&DataKey::Admin, &admin);
+        env.storage().instance().set(&DataKey::Initialized, &true);
+
         storage::initialize(&env);
         subscription::storage::initialize_subscription_storage(&env);
         true
@@ -1542,10 +1555,10 @@ impl StellarGuildsContract {
         get_guild_bounties_list(&env, guild_id)
     }
 
-    // ════════════════════════════════════════════════════════════════════════
+    // Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
     //  Multi-Signature Framework
     //  Provides M-of-N signing, configurable policies, and emergency controls.
-    // ════════════════════════════════════════════════════════════════════════
+    // Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 
     /// Register a new multi-signature safe account.
     pub fn ms_register_account(
@@ -1641,7 +1654,7 @@ impl StellarGuildsContract {
         internal_list_accounts_by_owner(&env, owner)
     }
 
-    // ─── Multi-Sig Operations ─────────────────────────────────────────────
+    // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Multi-Sig Operations Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
     /// Propose a new operation requiring multi-sig approval.
     pub fn ms_propose_operation(
@@ -1755,7 +1768,7 @@ impl StellarGuildsContract {
         internal_get_pending_operations(&env, account_id)
     }
 
-    // ─── Emergency Controls ───────────────────────────────────────────────
+    // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Emergency Controls Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
     /// Extend or shorten the expiry of a pending operation (owner only).
     pub fn ms_emergency_extend_timeout(
@@ -1778,7 +1791,7 @@ impl StellarGuildsContract {
         }
     }
 
-    // ─── Policy Management ────────────────────────────────────────────────
+    // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Policy Management Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
     /// Set a custom signing policy for a specific operation type (owner only).
     pub fn ms_set_policy(
@@ -2255,7 +2268,7 @@ mod tests {
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(env, &contract_id);
 
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         contract_id
     }
@@ -2263,14 +2276,14 @@ mod tests {
     // ============ Initialization Tests ============
 
     #[test]
-    fn test_initialize() {
+    #[should_panic(expected = "Already initialized")]
+    fn test_initialize_already_initialized_panics() {
         let (env, _, _, _, _) = setup();
         let contract_id = register_and_init_contract(&env);
 
-        // Verify initialization was successful
+        // Verify that calling initialize again panics
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        let result = client.initialize();
-        assert_eq!(result, true);
+        client.initialize(&Address::generate(&env));
     }
 
     #[test]
@@ -2926,7 +2939,7 @@ mod tests {
 
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         let creator = Address::generate(&env);
         let token = Some(Address::generate(&env));
@@ -2945,7 +2958,7 @@ mod tests {
 
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         let creator = Address::generate(&env);
         let recipient1 = Address::generate(&env);
@@ -2971,7 +2984,7 @@ mod tests {
 
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         let creator = Address::generate(&env);
         let recipient = Address::generate(&env);
@@ -2995,7 +3008,7 @@ mod tests {
 
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         let creator = Address::generate(&env);
         let recipient1 = Address::generate(&env);
@@ -3028,7 +3041,7 @@ mod tests {
 
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(&env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
 
         let creator = Address::generate(&env);
         let token = Some(Address::generate(&env));
@@ -3045,3 +3058,6 @@ mod tests {
         assert_eq!(status, DistributionStatus::Cancelled);
     }
 }
+
+#[cfg(test)]
+mod test_init;

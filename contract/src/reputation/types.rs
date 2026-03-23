@@ -1,6 +1,6 @@
-use soroban_sdk::{contracttype, Address, String};
+﻿use soroban_sdk::{contracttype, Address, String};
 
-// ────────────────────── Contribution Types ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Contribution Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Types of contributions that earn reputation
 #[contracttype]
@@ -13,7 +13,7 @@ pub enum ContributionType {
     DisputeResolved,
 }
 
-// ────────────────────── Scoring Constants ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Scoring Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Points awarded per contribution type
 pub const POINTS_BOUNTY_COMPLETED: u32 = 100;
@@ -28,7 +28,7 @@ pub const DECAY_PERIOD_SECS: u64 = 604_800; // 1 week
 pub const DECAY_NUMERATOR: u64 = 99;
 pub const DECAY_DENOMINATOR: u64 = 100;
 
-// ────────────────────── Core Structs ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Core Structs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Individual contribution record for audit trail
 #[contracttype]
@@ -62,7 +62,7 @@ pub struct ReputationProfile {
     pub last_decay_applied: u64,
 }
 
-// ────────────────────── Badge System ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Badge System â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Types of badges that can be earned
 #[contracttype]
@@ -92,7 +92,7 @@ pub struct Badge {
     pub awarded_at: u64,
 }
 
-// ────────────────────── Events ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Events â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]

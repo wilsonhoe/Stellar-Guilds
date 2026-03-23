@@ -1,4 +1,4 @@
-use crate::subscription::types::{BillingCycle, MembershipTier, SubscriptionStatus};
+﻿use crate::subscription::types::{BillingCycle, MembershipTier, SubscriptionStatus};
 use crate::{StellarGuildsContract, StellarGuildsContractClient};
 use soroban_sdk::testutils::Address as _;
 use soroban_sdk::{Address, Env, String, Vec};
@@ -12,7 +12,7 @@ fn setup_env() -> Env {
 fn register_and_init_contract(env: &Env) -> Address {
     let contract_id = env.register_contract(None, StellarGuildsContract);
     let client = StellarGuildsContractClient::new(env, &contract_id);
-    client.initialize();
+    client.initialize(&Address::generate(&env));
     contract_id
 }
 

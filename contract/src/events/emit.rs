@@ -1,11 +1,11 @@
-/// Central event emission helper for the Stellar Guilds contract.
+﻿/// Central event emission helper for the Stellar Guilds contract.
 ///
 /// All modules **must** emit events exclusively through `emit_event()`.
 /// Direct calls to `env.events().publish()` are forbidden outside this file
 /// to guarantee consistent envelope structure, sequence numbering, and topic
 /// format across the entire contract.
 ///
-/// # Example — emitting a guild creation event
+/// # Example â€” emitting a guild creation event
 /// ```rust
 /// use crate::events::emit::emit_event;
 /// use crate::events::topics::{MOD_GUILD, ACT_CREATED};
@@ -50,14 +50,14 @@ fn set_sequence(env: &Env, seq: u64) {
 /// Emit a standardized event with full envelope metadata.
 ///
 /// # Type parameters
-/// `T` — The event payload struct. Must implement `soroban_sdk::IntoVal<Env, Val>`,
+/// `T` â€” The event payload struct. Must implement `soroban_sdk::IntoVal<Env, Val>`,
 /// which is automatically satisfied for any `#[contracttype]` struct.
 ///
 /// # Arguments
-/// * `env`    — The Soroban environment.
-/// * `module` — String slice matching one of the `MOD_*` constants in `topics.rs`.
-/// * `action` — String slice matching one of the `ACT_*` constants in `topics.rs`.
-/// * `data`   — The event-specific payload struct.
+/// * `env`    â€” The Soroban environment.
+/// * `module` â€” String slice matching one of the `MOD_*` constants in `topics.rs`.
+/// * `action` â€” String slice matching one of the `ACT_*` constants in `topics.rs`.
+/// * `data`   â€” The event-specific payload struct.
 ///
 /// # Topics
 /// The published topic tuple is `(module_symbol, action_symbol)`, giving

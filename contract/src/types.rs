@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String};
+﻿use soroban_sdk::{contracttype, Address, String};
 
 /// Represents a Guild's configuration in Soroban storage
 #[contracttype]

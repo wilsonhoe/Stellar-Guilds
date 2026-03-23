@@ -1,4 +1,4 @@
-//! Dispute Resolution Module
+﻿//! Dispute Resolution Module
 //!
 //! Provides dispute creation, evidence submission, voting, and resolution
 //! for bounties and milestones with weighted guild voting.

@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, String};
+﻿use soroban_sdk::{contracttype, String};
 
 /// Reporting period options for analytics queries
 #[contracttype]

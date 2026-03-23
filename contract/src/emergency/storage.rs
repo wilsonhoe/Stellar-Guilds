@@ -1,4 +1,4 @@
-use crate::emergency::types::{EmergencyConfig, EmergencyStatus};
+﻿use crate::emergency::types::{EmergencyConfig, EmergencyStatus};
 use soroban_sdk::{contracttype, Address, Env, String};
 
 #[contracttype]

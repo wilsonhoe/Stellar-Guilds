@@ -1,4 +1,4 @@
-#[cfg(test)]
+﻿#[cfg(test)]
 mod tests {
     use crate::governance::{ProposalType, VoteDecision};
     use crate::multisig::types::{OperationStatus, OperationType, TIMEOUT_24H, TIMEOUT_48H};
@@ -18,7 +18,7 @@ mod tests {
     fn init_client(env: &Env) -> StellarGuildsContractClient<'_> {
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
         client
     }
 

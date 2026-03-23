@@ -1,4 +1,4 @@
-use soroban_sdk::{symbol_short, Address, Env, Map, Symbol, Vec};
+﻿use soroban_sdk::{symbol_short, Address, Env, Map, Symbol, Vec};
 
 use crate::reputation::types::{Badge, ContributionRecord, ReputationProfile};
 
@@ -10,7 +10,7 @@ const BADGE_IDX: Symbol = symbol_short!("r_bidx");
 const CONTRIB_CNT: Symbol = symbol_short!("r_ccnt");
 const BADGE_CNT: Symbol = symbol_short!("r_bcnt");
 
-// ────────────────────── Reputation Profiles ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Reputation Profiles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Store or update a reputation profile keyed by (address, guild_id).
 pub fn store_profile(env: &Env, profile: &ReputationProfile) {
@@ -45,7 +45,7 @@ pub fn get_all_guild_profiles(env: &Env, address: &Address) -> Vec<ReputationPro
     result
 }
 
-// ────────────────────── Contributions ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Contributions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Get next contribution ID (global counter).
 pub fn get_next_contribution_id(env: &Env) -> u64 {
@@ -137,7 +137,7 @@ pub fn count_contributions_by_type(
     count
 }
 
-// ────────────────────── Badges ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Get next badge ID.
 pub fn get_next_badge_id(env: &Env) -> u64 {

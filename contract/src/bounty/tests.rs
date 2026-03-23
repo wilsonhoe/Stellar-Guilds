@@ -1,4 +1,4 @@
-//! Bounty Escrow Contract Tests
+﻿//! Bounty Escrow Contract Tests
 //!
 //! Comprehensive test coverage for bounty creation, funding, claiming,
 //! submission, approval, escrow release, cancellation, and expiration.
@@ -37,7 +37,7 @@ fn set_ledger_timestamp(env: &Env, timestamp: u64) {
 fn register_and_init_contract(env: &Env) -> Address {
     let contract_id = env.register_contract(None, StellarGuildsContract);
     let client = StellarGuildsContractClient::new(env, &contract_id);
-    client.initialize();
+    client.initialize(&Address::generate(&env));
     contract_id
 }
 

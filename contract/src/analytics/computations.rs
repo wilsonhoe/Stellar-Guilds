@@ -1,4 +1,4 @@
-use soroban_sdk::{Env, String, Vec};
+﻿use soroban_sdk::{Env, String, Vec};
 
 use crate::analytics::types::{
     BudgetUtilization, CategoryBreakdown, SpendingForecast, SpendingSummary, SpendingTrend,
@@ -73,7 +73,7 @@ pub fn compute_budget_utilization(env: &Env, treasury_id: u64) -> Vec<BudgetUtil
         };
 
         let utilization_bps: u32 = if budget.allocated_amount > 0 {
-            // (spent * 10000) / allocated — safe since allocated > 0
+            // (spent * 10000) / allocated â€” safe since allocated > 0
             let bps = (budget.spent_amount * 10000) / budget.allocated_amount;
             // Cap at 10000 (100%)
             if bps > 10000 {
@@ -263,7 +263,7 @@ pub fn compute_forecast(
     }
 }
 
-// ────────────────────── Helpers ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 fn is_executed(tx: &Transaction) -> bool {
     matches!(tx.status, TransactionStatus::Executed)

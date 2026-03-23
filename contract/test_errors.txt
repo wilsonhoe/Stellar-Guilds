@@ -1,0 +1,262 @@
+﻿cargo :     Blocking waiting for file lock on artifact directory
+At line:1 char:1
++ cargo test test_init 2>&1 | Out-File -FilePath test_errors.txt -Encod ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (    Blocking wa...ifact directory:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   Compiling stellar-guilds-contract v0.1.0 (C:\Users\HP\Desktop\Stellar-Guilds\contract)
+warning: unused import: `EVENT_SEQUENCE_KEY`
+  --> src\events\emit.rs:31:65
+   |
+31 | use crate::events::types::{EventEnvelope, EVENT_SCHEMA_VERSION, EVENT_SEQUENCE_KEY};
+   |                                                                 ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `emit::emit_event`
+  --> src\events\mod.rs:63:9
+   |
+63 | pub use emit::emit_event;
+   |         ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `BudgetUtilization`, `CategoryBreakdown`, `SpendingForecast`, `SpendingSummary`, 
+`SpendingTrend`, and `TreasurySnapshot`
+ --> src\analytics\tests.rs:4:9
+  |
+4 |         BudgetUtilization, CategoryBreakdown, SpendingForecast, SpendingSummary, SpendingTrend,
+  |         ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+5 |         TreasurySnapshot,
+  |         ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `TransactionStatus` and `TransactionType`
+ --> src\analytics\tests.rs:7:34
+  |
+7 |     use crate::treasury::types::{TransactionStatus, TransactionType};
+  |                                  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+
+warning: unused import: `get_badges`
+ --> src\reputation\scoring.rs:5:34
+  |
+5 |     count_contributions_by_type, get_badges, get_next_badge_id, get_next_contribution_id,
+  |                                  ^^^^^^^^^^
+
+warning: unused import: `BadgeType`
+  --> src\reputation\mod.rs:11:24
+   |
+11 | pub use types::{Badge, BadgeType, ContributionRecord, ContributionType, ReputationProfile};
+   |                        ^^^^^^^^^
+
+warning: unused import: `RetryConfig`
+ --> src\subscription\lifecycle.rs:9:22
+  |
+9 |     ProrationResult, RetryConfig, RevenueRecord, RevenueRecordedEvent, Subscription,
+  |                      ^^^^^^^^^^^
+
+warning: unused imports: `BillingCycle` and `MembershipTier`
+ --> src\subscription\storage.rs:2:5
+  |
+2 |     BillingCycle, MembershipTier, RetryConfig, RevenueRecord, Subscription, SubscriptionPlan,
+  |     ^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `Map`
+ --> src\subscription\storage.rs:4:47
+  |
+4 | use soroban_sdk::{contracttype, Address, Env, Map, Vec};
+  |                                               ^^^
+
+warning: unused imports: `GracePeriodStartedEvent`, `PaymentProcessedEvent`, `PlanCreatedEvent`, `RetryConfig`, 
+`RevenueRecord`, `RevenueRecordedEvent`, `SubscriptionCancelledEvent`, `SubscriptionCreatedEvent`, and 
+`TierChangedEvent`
+  --> src\subscription\mod.rs:40:19
+   |
+40 |     BillingCycle, GracePeriodStartedEvent, MembershipTier, PaymentProcessedEvent, PlanCreatedEvent,
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+41 |     ProrationResult, RetryConfig, RevenueRecord, RevenueRecordedEvent, Subscription,
+   |                      ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+42 |     SubscriptionCancelledEvent, SubscriptionChange, SubscriptionCreatedEvent, SubscriptionError,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^
+43 |     SubscriptionPlan, SubscriptionStatus, TierChangedEvent,
+   |                                           ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `add_guild_revenue`, `get_all_plans`, `get_guild_plans`, `get_guild_revenue_records`, 
+`get_plan`, `get_retry_config`, `get_revenue_record`, `get_subscription`, `get_subscriptions_by_plan`, 
+`get_user_subscription`, `initialize_subscription_storage`, `set_retry_config`, `store_plan`, and `store_subscription`
+  --> src\subscription\mod.rs:48:5
+   |
+48 |     add_guild_revenue, get_all_plans, get_guild_plans, get_guild_revenue_records, get_plan,
+   |     ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^
+49 |     get_retry_config, get_revenue_record, get_subscription, get_subscriptions_by_plan,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+50 |     get_user_subscription, initialize_subscription_storage, set_retry_config, store_plan,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+51 |     store_subscription,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ProrationResult`, `SubscriptionError`, `SubscriptionPlan`, and `SubscriptionStatus`
+  --> src\lib.rs:83:5
+   |
+83 |     ProrationResult, Subscription, SubscriptionChange, SubscriptionError, SubscriptionPlan,
+   |     ^^^^^^^^^^^^^^^                                    ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+84 |     SubscriptionStatus,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `MultiSigOperation`
+ --> src\emergency\actions.rs:4:30
+  |
+4 | use crate::multisig::types::{MultiSigOperation, OperationStatus, OperationType};
+  |                              ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Address`
+ --> src\emergency\actions.rs:5:19
+  |
+5 | use soroban_sdk::{Address, Env, String};
+  |                   ^^^^^^^
+
+warning: unused import: `types::*`
+ --> src\emergency\mod.rs:7:9
+  |
+7 | pub use types::*;
+  |         ^^^^^^^^
+
+warning: unused imports: `is_paused as emerg_is_paused`, `pause_contract as emerg_pause_contract`, and 
+`resume_contract as emerg_resume_contract`
+   --> src\lib.rs:105:5
+    |
+105 |     is_paused as emerg_is_paused, pause_contract as emerg_pause_contract,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+106 |     resume_contract as emerg_resume_contract,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Address` and `testutils::Address as _`
+ --> src\upgrade\tests.rs:4:19
+  |
+4 | use soroban_sdk::{testutils::Address as _, Address, Env};
+  |                   ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^
+
+error[E0308]: mismatched types
+    --> src\lib.rs:2942:46
+     |
+2942 |         client.initialize(&Address::generate(env));
+     |                            ----------------- ^^^ expected `&Env`, found `Env`
+     |                            |
+     |                            arguments to this function are incorrect
+     |
+note: associated function defined here
+    --> C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\soroban-sdk-21.7.7\src\testutils.rs:406:8
+     |
+ 406 |     fn generate(env: &Env) -> crate::Address;
+     |        ^^^^^^^^
+help: consider borrowing here
+     |
+2942 |         client.initialize(&Address::generate(&env));
+     |                                              +
+
+error[E0308]: mismatched types
+    --> src\lib.rs:2961:46
+     |
+2961 |         client.initialize(&Address::generate(env));
+     |                            ----------------- ^^^ expected `&Env`, found `Env`
+     |                            |
+     |                            arguments to this function are incorrect
+     |
+note: associated function defined here
+    --> C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\soroban-sdk-21.7.7\src\testutils.rs:406:8
+     |
+ 406 |     fn generate(env: &Env) -> crate::Address;
+     |        ^^^^^^^^
+help: consider borrowing here
+     |
+2961 |         client.initialize(&Address::generate(&env));
+     |                                              +
+
+error[E0308]: mismatched types
+    --> src\lib.rs:2987:46
+     |
+2987 |         client.initialize(&Address::generate(env));
+     |                            ----------------- ^^^ expected `&Env`, found `Env`
+     |                            |
+     |                            arguments to this function are incorrect
+     |
+note: associated function defined here
+    --> C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\soroban-sdk-21.7.7\src\testutils.rs:406:8
+     |
+ 406 |     fn generate(env: &Env) -> crate::Address;
+     |        ^^^^^^^^
+help: consider borrowing here
+     |
+2987 |         client.initialize(&Address::generate(&env));
+     |                                              +
+
+error[E0308]: mismatched types
+    --> src\lib.rs:3011:46
+     |
+3011 |         client.initialize(&Address::generate(env));
+     |                            ----------------- ^^^ expected `&Env`, found `Env`
+     |                            |
+     |                            arguments to this function are incorrect
+     |
+note: associated function defined here
+    --> C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\soroban-sdk-21.7.7\src\testutils.rs:406:8
+     |
+ 406 |     fn generate(env: &Env) -> crate::Address;
+     |        ^^^^^^^^
+help: consider borrowing here
+     |
+3011 |         client.initialize(&Address::generate(&env));
+     |                                              +
+
+error[E0308]: mismatched types
+    --> src\lib.rs:3044:46
+     |
+3044 |         client.initialize(&Address::generate(env));
+     |                            ----------------- ^^^ expected `&Env`, found `Env`
+     |                            |
+     |                            arguments to this function are incorrect
+     |
+note: associated function defined here
+    --> C:\Users\HP\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\soroban-sdk-21.7.7\src\testutils.rs:406:8
+     |
+ 406 |     fn generate(env: &Env) -> crate::Address;
+     |        ^^^^^^^^
+help: consider borrowing here
+     |
+3044 |         client.initialize(&Address::generate(&env));
+     |                                              +
+
+warning: unused variable: `owner`
+  --> src\analytics\tests.rs:77:27
+   |
+77 |         let (treasury_id, owner, signer1, signer2) = create_treasury(&env, &client, guild_id);
+   |                           ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `signer1`
+  --> src\analytics\tests.rs:77:34
+   |
+77 |         let (treasury_id, owner, signer1, signer2) = create_treasury(&env, &client, guild_id);
+   |                                  ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_signer1`
+
+warning: unused variable: `signer2`
+  --> src\analytics\tests.rs:77:43
+   |
+77 |         let (treasury_id, owner, signer1, signer2) = create_treasury(&env, &client, guild_id);
+   |                                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: 
+`_signer2`
+
+warning: unused variable: `governance_addr`
+  --> src\upgrade\logic.rs:14:9
+   |
+14 |     let governance_addr = storage::get_governance_address(env);
+   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_governance_addr`
+
+warning: unused variable: `env`
+  --> src\upgrade\tests.rs:57:9
+   |
+57 |     let env = Env::default();
+   |         ^^^ help: if this is intentional, prefix it with an underscore: `_env`
+
+For more information about this error, try `rustc --explain E0308`.
+warning: `stellar-guilds-contract` (lib test) generated 22 warnings
+error: could not compile `stellar-guilds-contract` (lib test) due to 5 previous errors; 22 warnings emitted

@@ -1,11 +1,11 @@
-/// Centralized event logging system for Stellar Guilds.
+﻿/// Centralized event logging system for Stellar Guilds.
 ///
 /// # Problem solved
 /// Prior to this module, each sub-module emitted events independently with
 /// inconsistent topic formats:
 /// - `guild/membership.rs`: `(Symbol::new(env, "guild_created"), Symbol::new(env, "v0"))`
 /// - `bounty/mod.rs`:       `(Symbol::new(env, "bounty"), Symbol::new(env, "created"))`
-/// - `payment/distribution.rs`: `("PaymentPoolCreated",)` — a plain string
+/// - `payment/distribution.rs`: `("PaymentPoolCreated",)` â€” a plain string
 ///
 /// This made off-chain indexing fragile, broke any tooling trying to subscribe
 /// to a consistent event stream, and made audit trails incomplete.
@@ -13,10 +13,10 @@
 /// # Architecture
 /// ```
 /// events/
-///   mod.rs    ← you are here; re-exports for easy import
-///   types.rs  ← EventEnvelope + schema version constant
-///   topics.rs ← MOD_* and ACT_* string constants (the controlled vocabulary)
-///   emit.rs   ← emit_event() — the only function modules should call
+///   mod.rs    â† you are here; re-exports for easy import
+///   types.rs  â† EventEnvelope + schema version constant
+///   topics.rs â† MOD_* and ACT_* string constants (the controlled vocabulary)
+///   emit.rs   â† emit_event() â€” the only function modules should call
 /// ```
 ///
 /// # Two-event-per-action design

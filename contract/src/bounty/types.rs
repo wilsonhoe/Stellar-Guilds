@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String};
+﻿use soroban_sdk::{contracttype, Address, String};
 
 /// Status of a bounty lifecycle
 #[contracttype]

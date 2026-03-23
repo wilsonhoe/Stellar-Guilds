@@ -1,4 +1,4 @@
-#[cfg(test)]
+﻿#[cfg(test)]
 mod tests {
     use crate::analytics::types::{
         BudgetUtilization, CategoryBreakdown, SpendingForecast, SpendingSummary, SpendingTrend,
@@ -32,7 +32,7 @@ mod tests {
     fn register_and_init_contract(env: &Env) -> Address {
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
         contract_id
     }
 
@@ -47,9 +47,9 @@ mod tests {
         client: &StellarGuildsContractClient<'_>,
         guild_id: u64,
     ) -> (u64, Address, Address, Address) {
-        let owner = Address::generate(env);
-        let signer1 = Address::generate(env);
-        let signer2 = Address::generate(env);
+        let owner = Address::generate(&env);
+        let signer1 = Address::generate(&env);
+        let signer2 = Address::generate(&env);
 
         env.mock_all_auths();
 

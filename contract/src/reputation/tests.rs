@@ -1,4 +1,4 @@
-#[cfg(test)]
+﻿#[cfg(test)]
 mod tests {
     use crate::guild::types::Role;
     use crate::reputation::types::{BadgeType, ContributionType};
@@ -29,7 +29,7 @@ mod tests {
     fn register_and_init_contract(env: &Env) -> Address {
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
         contract_id
     }
 
@@ -143,7 +143,7 @@ mod tests {
         set_ledger_timestamp(&env, 1000 + 604_800 * 11);
 
         let profile_later = client.get_reputation(&guild_id, &contributor);
-        // After 11 periods: 100 * (99/100)^11 ≈ 89
+        // After 11 periods: 100 * (99/100)^11 â‰ˆ 89
         assert!(profile_later.decayed_score < 100);
         assert!(profile_later.decayed_score > 80);
     }

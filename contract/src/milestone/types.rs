@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String};
+﻿use soroban_sdk::{contracttype, Address, String};
 
 /// Overall status of a project
 #[contracttype]

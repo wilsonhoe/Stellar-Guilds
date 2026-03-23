@@ -1,4 +1,4 @@
-use crate::events::emit::emit_event;
+﻿use crate::events::emit::emit_event;
 use crate::events::topics::{
     ACT_CANCELLED, ACT_DISTRIBUTED, ACT_FAILED, ACT_RECIPIENT_ADDED, MOD_PAYMENT,
     ACT_CREATED,
@@ -37,7 +37,7 @@ const MIN_SHARE_AMOUNT: i128 = 1;
 /// Create a new payment pool
 ///
 /// # Events emitted
-/// - `(payment, created)` → `PaymentPoolCreatedEvent`
+/// - `(payment, created)` â†’ `PaymentPoolCreatedEvent`
 ///
 /// # Arguments
 /// * `env`     - The contract environment
@@ -91,13 +91,13 @@ pub fn create_payment_pool(
 /// Add a recipient to a payment pool
 ///
 /// # Events emitted
-/// - `(payment, recipient_added)` → `RecipientAddedEvent`
+/// - `(payment, recipient_added)` â†’ `RecipientAddedEvent`
 ///
 /// # Arguments
 /// * `env`     - The contract environment
 /// * `pool_id` - ID of the pool
 /// * `address` - Recipient address
-/// * `share`   - Share percentage (0–100) or weight; meaning depends on pool rule
+/// * `share`   - Share percentage (0â€“100) or weight; meaning depends on pool rule
 /// * `caller`  - Address making the request (must be pool creator)
 ///
 /// # Errors
@@ -228,8 +228,8 @@ fn calculate_recipient_amount(
 /// `(payment, failed)` and returns `Err(InsufficientBalance)`.
 ///
 /// # Events emitted
-/// - `(payment, distributed)` → `DistributionExecutedEvent`   (on success)
-/// - `(payment, failed)`      → `DistributionFailedEvent`     (on failure)
+/// - `(payment, distributed)` â†’ `DistributionExecutedEvent`   (on success)
+/// - `(payment, failed)`      â†’ `DistributionFailedEvent`     (on failure)
 ///
 /// # Arguments
 /// * `env`     - The contract environment
@@ -346,7 +346,7 @@ pub fn get_recipient_amount(
 /// Cancel a pending payment pool and clear its recipients.
 ///
 /// # Events emitted
-/// - `(payment, cancelled)` → `PoolCancelledEvent`
+/// - `(payment, cancelled)` â†’ `PoolCancelledEvent`
 pub fn cancel_distribution(env: &Env, pool_id: u64, caller: Address) -> Result<bool, PaymentError> {
     let pool = get_payment_pool(env, pool_id).ok_or(PaymentError::PoolNotFound)?;
 
@@ -381,7 +381,7 @@ pub fn get_pool_status(env: &Env, pool_id: u64) -> Result<DistributionStatus, Pa
 
 /// Execute distributions for multiple pools in a single call.
 ///
-/// Returns a vector of `bool` — `true` for each pool that distributed
+/// Returns a vector of `bool` â€” `true` for each pool that distributed
 /// successfully, `false` for those that failed (individual errors are
 /// captured in the `(payment, failed)` events emitted per pool).
 pub fn batch_distribute(env: &Env, pool_ids: Vec<u64>, caller: Address) -> Vec<bool> {

@@ -1,4 +1,4 @@
-//! Milestone Tracking Contract Tests
+﻿//! Milestone Tracking Contract Tests
 //!
 //! Comprehensive test coverage for project creation, milestone management,
 //! sequential/parallel flows, submissions, approvals, and progress tracking.
@@ -36,7 +36,7 @@ fn set_ledger_timestamp(env: &Env, timestamp: u64) {
 fn register_and_init_contract(env: &Env) -> Address {
     let contract_id = env.register_contract(None, StellarGuildsContract);
     let client = StellarGuildsContractClient::new(env, &contract_id);
-    client.initialize();
+    client.initialize(&Address::generate(&env));
     contract_id
 }
 
@@ -63,8 +63,8 @@ fn create_treasury_with_funds(
     owner: &Address,
     amount: i128,
 ) -> u64 {
-    let signer1 = Address::generate(env);
-    let signer2 = Address::generate(env);
+    let signer1 = Address::generate(&env);
+    let signer2 = Address::generate(&env);
 
     env.mock_all_auths();
 

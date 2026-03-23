@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, Env, String, Symbol};
+﻿use soroban_sdk::{Address, Env, String, Symbol};
 
 use crate::guild::types::Role;
 use crate::reputation::storage::{
@@ -13,7 +13,7 @@ use crate::reputation::types::{
 
 use crate::governance::types::role_weight;
 
-// ────────────────────── Core Scoring ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Core Scoring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Record a contribution and update the user's reputation profile.
 /// Awards badges if thresholds are met.
@@ -77,7 +77,7 @@ pub fn record_contribution(
     check_and_award_badges(env, guild_id, contributor, &profile);
 }
 
-// ────────────────────── Decay ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Decay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Apply time-based decay to a profile's decayed_score.
 /// Uses iterative multiplication by 99/100 per elapsed period.
@@ -117,7 +117,7 @@ pub fn get_decayed_profile(
     Some(profile)
 }
 
-// ────────────────────── Governance Weight ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Governance Weight â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Compute governance weight: role_weight + integer_sqrt(decayed_score).
 /// Falls back to role_weight only if no reputation profile exists.
@@ -145,7 +145,7 @@ pub fn get_global_reputation(env: &Env, address: &Address) -> u64 {
     total
 }
 
-// ────────────────────── Badge Logic ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Badge Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Check badge criteria and award any newly earned badges.
 fn check_and_award_badges(
@@ -156,7 +156,7 @@ fn check_and_award_badges(
 ) {
     let now = env.ledger().timestamp();
 
-    // FirstContribution — contributions_count >= 1
+    // FirstContribution â€” contributions_count >= 1
     if profile.contributions_count >= 1 {
         maybe_award_badge(
             env,
@@ -168,7 +168,7 @@ fn check_and_award_badges(
         );
     }
 
-    // BountyHunter — 5+ bounties completed
+    // BountyHunter â€” 5+ bounties completed
     let bounty_count = count_contributions_by_type(
         env,
         contributor,
@@ -186,7 +186,7 @@ fn check_and_award_badges(
         );
     }
 
-    // Mentor — 10+ milestones approved
+    // Mentor â€” 10+ milestones approved
     let milestone_count = count_contributions_by_type(
         env,
         contributor,
@@ -197,7 +197,7 @@ fn check_and_award_badges(
         maybe_award_badge(env, guild_id, contributor, BadgeType::Mentor, "Mentor", now);
     }
 
-    // Governor — 10+ votes cast
+    // Governor â€” 10+ votes cast
     let vote_count =
         count_contributions_by_type(env, contributor, guild_id, &ContributionType::VoteCast);
     if vote_count >= 10 {
@@ -211,7 +211,7 @@ fn check_and_award_badges(
         );
     }
 
-    // Veteran — score > 1000
+    // Veteran â€” score > 1000
     if profile.total_score > 1000 {
         maybe_award_badge(
             env,
@@ -261,7 +261,7 @@ fn maybe_award_badge(
     );
 }
 
-// ────────────────────── Helpers ──────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Integer square root using Newton's method.
 fn integer_sqrt(n: u64) -> u64 {

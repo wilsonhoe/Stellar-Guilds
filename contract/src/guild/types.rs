@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address};
+﻿use soroban_sdk::{contracttype, Address};
 
 /// Role enum for guild members
 /// - Owner: Full control over the guild

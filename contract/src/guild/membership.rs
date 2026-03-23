@@ -1,4 +1,4 @@
-use crate::events::emit::emit_event;
+﻿use crate::events::emit::emit_event;
 use crate::events::topics::{
     ACT_CREATED, ACT_MEMBER_ADDED, ACT_MEMBER_REMOVED, ACT_ROLE_UPDATED, MOD_GUILD,
 };
@@ -11,11 +11,11 @@ use soroban_sdk::{Address, Env, String, Vec};
 /// Create a new guild
 ///
 /// # Events emitted
-/// - `(guild, created)` → `GuildCreatedEvent`
+/// - `(guild, created)` â†’ `GuildCreatedEvent`
 ///
 /// # Arguments
 /// * `env` - The contract environment
-/// * `name` - The name of the guild (1–256 chars)
+/// * `name` - The name of the guild (1â€“256 chars)
 /// * `description` - The description of the guild (max 512 chars)
 /// * `owner` - The address of the guild owner
 ///
@@ -81,7 +81,7 @@ pub fn create_guild(
 /// Add a member to a guild
 ///
 /// # Events emitted
-/// - `(guild, member_added)` → `MemberAddedEvent`
+/// - `(guild, member_added)` â†’ `MemberAddedEvent`
 ///
 /// # Arguments
 /// * `env`      - The contract environment
@@ -162,7 +162,7 @@ pub fn add_member(
 /// Remove a member from a guild
 ///
 /// # Events emitted
-/// - `(guild, member_removed)` → `MemberRemovedEvent`
+/// - `(guild, member_removed)` â†’ `MemberRemovedEvent`
 ///
 /// # Arguments
 /// * `env`      - The contract environment
@@ -247,7 +247,7 @@ pub fn remove_member(
 /// Update a member's role
 ///
 /// # Events emitted
-/// - `(guild, role_updated)` → `RoleUpdatedEvent`
+/// - `(guild, role_updated)` â†’ `RoleUpdatedEvent`
 ///
 /// # Arguments
 /// * `env`      - The contract environment
@@ -330,7 +330,7 @@ pub fn update_role(
     Ok(true)
 }
 
-// ─── Query helpers (no events) ────────────────────────────────────────────────
+// â”€â”€â”€ Query helpers (no events) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 pub fn get_member(env: &Env, guild_id: u64, address: Address) -> Result<Member, String> {
     storage::get_member(env, guild_id, &address).ok_or(String::from_str(env, "Member not found"))

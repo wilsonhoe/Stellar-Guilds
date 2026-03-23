@@ -1,12 +1,12 @@
-/// Standardized event topic constants for all Stellar Guilds contract modules.
+﻿/// Standardized event topic constants for all Stellar Guilds contract modules.
 ///
 /// Topics are two-element tuples of `(module, action)` Symbols that Stellar's
 /// event system uses for efficient filtering. All module code must use the
 /// constants defined here instead of creating ad-hoc Symbol strings inline.
 ///
 /// # Naming Convention
-/// - Module constants: `MOD_<MODULE>` — identifies which sub-module fired the event.
-/// - Action constants: `ACT_<ACTION>` — identifies what happened.
+/// - Module constants: `MOD_<MODULE>` â€” identifies which sub-module fired the event.
+/// - Action constants: `ACT_<ACTION>` â€” identifies what happened.
 ///
 /// # Backward Compatibility
 /// Symbol values in Soroban are limited to 32 bytes. Keep all strings short.

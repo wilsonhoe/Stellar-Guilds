@@ -1,6 +1,6 @@
 {
   "generators": {
-    "address": 6,
+    "address": 7,
     "nonce": 0
   },
   "auth": [
@@ -1120,6 +1120,30 @@
                         "val": {
                           "u64": 5
                         }
+                      },
+                      {
+                        "key": {
+                          "vec": [
+                            {
+                              "symbol": "Admin"
+                            }
+                          ]
+                        },
+                        "val": {
+                          "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLZM"
+                        }
+                      },
+                      {
+                        "key": {
+                          "vec": [
+                            {
+                              "symbol": "Initialized"
+                            }
+                          ]
+                        },
+                        "val": {
+                          "bool": true
+                        }
                       }
                     ]
                   }
@@ -1551,7 +1575,9 @@
                 "symbol": "initialize"
               }
             ],
-            "data": "void"
+            "data": {
+              "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLZM"
+            }
           }
         }
       },
@@ -2725,7 +2751,7 @@
             "data": {
               "vec": [
                 {
-                  "string": "caught panic 'Unauthorized: Approver must be a guild admin or owner' from contract function 'Symbol(obj#661)'"
+                  "string": "caught panic 'Unauthorized: Approver must be a guild admin or owner' from contract function 'Symbol(obj#713)'"
                 },
                 {
                   "u64": 1

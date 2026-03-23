@@ -1,23 +1,23 @@
-use soroban_sdk::{symbol_short, Address, Env, Map, Symbol, Vec};
+﻿use soroban_sdk::{symbol_short, Address, Env, Map, Symbol, Vec};
 
 use super::types::TokenAllowance;
 
-// ── Storage Keys ─────────────────────────────────────────────────────────────
+// â”€â”€ Storage Keys â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-/// Main allowance map: (owner, spender, token) → TokenAllowance
+/// Main allowance map: (owner, spender, token) â†’ TokenAllowance
 const ALLOWANCES_KEY: Symbol = symbol_short!("tkn_alw");
 
-/// Owner index: owner → Vec<(spender, token)>
+/// Owner index: owner â†’ Vec<(spender, token)>
 const OWNER_IDX_KEY: Symbol = symbol_short!("alw_oidx");
 
-/// Spender index: spender → Vec<(owner, token)>
+/// Spender index: spender â†’ Vec<(owner, token)>
 const SPENDER_IDX_KEY: Symbol = symbol_short!("alw_sidx");
 
-// ── Composite Key Type ───────────────────────────────────────────────────────
+// â”€â”€ Composite Key Type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type AllowanceKey = (Address, Address, Option<Address>); // (owner, spender, token)
 
-// ── CRUD ─────────────────────────────────────────────────────────────────────
+// â”€â”€ CRUD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 pub fn store_allowance(env: &Env, allowance: &TokenAllowance) {
     let key: AllowanceKey = (
@@ -139,7 +139,7 @@ pub fn delete_allowance(env: &Env, owner: &Address, spender: &Address, token: &O
     }
 }
 
-// ── Index Queries ────────────────────────────────────────────────────────────
+// â”€â”€ Index Queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// List all allowances granted by `owner`.
 pub fn list_by_owner(env: &Env, owner: &Address) -> Vec<TokenAllowance> {

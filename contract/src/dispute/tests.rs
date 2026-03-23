@@ -1,4 +1,4 @@
-//! Dispute Resolution Contract Tests
+﻿//! Dispute Resolution Contract Tests
 
 use crate::dispute::types::VoteDecision;
 use crate::guild::types::Role;
@@ -29,7 +29,7 @@ fn set_ledger_timestamp(env: &Env, timestamp: u64) {
 fn register_and_init_contract(env: &Env) -> Address {
     let contract_id = env.register_contract(None, StellarGuildsContract);
     let client = StellarGuildsContractClient::new(env, &contract_id);
-    client.initialize();
+    client.initialize(&Address::generate(&env));
     contract_id
 }
 
@@ -58,10 +58,10 @@ fn setup_guild_with_members(
     client: &StellarGuildsContractClient<'_>,
     env: &Env,
 ) -> (u64, Address, Address, Address, Address) {
-    let owner = Address::generate(env);
-    let admin = Address::generate(env);
-    let member = Address::generate(env);
-    let contributor = Address::generate(env);
+    let owner = Address::generate(&env);
+    let admin = Address::generate(&env);
+    let member = Address::generate(&env);
+    let contributor = Address::generate(&env);
 
     let guild_id = setup_guild(client, env, &owner);
 

@@ -1,4 +1,4 @@
-#[cfg(test)]
+﻿#[cfg(test)]
 mod tests {
     use crate::governance::types::{ProposalStatus, ProposalType, VoteDecision};
     use crate::guild::types::Role;
@@ -29,7 +29,7 @@ mod tests {
     fn register_and_init_contract(env: &Env) -> Address {
         let contract_id = env.register_contract(None, StellarGuildsContract);
         let client = StellarGuildsContractClient::new(env, &contract_id);
-        client.initialize();
+        client.initialize(&Address::generate(&env));
         contract_id
     }
 
@@ -44,9 +44,9 @@ mod tests {
         client: &StellarGuildsContractClient<'_>,
         owner: &Address,
     ) -> (u64, Address, Address, Address) {
-        let admin = Address::generate(env);
-        let member = Address::generate(env);
-        let contributor = Address::generate(env);
+        let admin = Address::generate(&env);
+        let member = Address::generate(&env);
+        let contributor = Address::generate(&env);
 
         let guild_id = setup_guild(client, env, owner);
 

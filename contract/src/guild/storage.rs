@@ -1,4 +1,4 @@
-use crate::guild::types::{Guild, Member, Role};
+﻿use crate::guild::types::{Guild, Member, Role};
 use soroban_sdk::{symbol_short, Address, Env, Map, Symbol, Vec};
 
 // Storage keys as symbols for efficient lookup
