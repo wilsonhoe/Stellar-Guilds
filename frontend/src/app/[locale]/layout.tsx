@@ -34,7 +34,7 @@ export default async function RootLayout({
     <html lang={locale} className="dark">
       <body className={inter.className}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="min-h-screen bg-stellar-navy text-stellar-white font-sans">
+          <div className="min-h-screen flex flex-col bg-stellar-navy text-stellar-white font-sans">
             {children}
           </div>
         </NextIntlClientProvider>
