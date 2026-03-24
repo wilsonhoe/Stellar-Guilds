@@ -29,7 +29,7 @@ export class BountyController {
 
   @Get(':id')
   async get(@Param('id') id: string) {
-    return this.service.get(id);
+    return this.service.findOne(id);
   }
 
   @Get()

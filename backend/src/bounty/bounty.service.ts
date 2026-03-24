@@ -31,6 +31,18 @@ export class BountyService {
     return this.prisma.bounty.create({ data });
   }
 
+  async findOne(id: string) {
+    const bounty = await this.prisma.bounty.findUnique({
+      where: { id },
+      include: { 
+        creator: true, 
+        assignee: true 
+      },
+    });
+    if (!bounty) throw new NotFoundException('Bounty not found');
+    return bounty;
+  }
+
   async get(id: string) {
     const bounty = await this.prisma.bounty.findUnique({
       where: { id },
