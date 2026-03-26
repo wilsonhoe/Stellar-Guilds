@@ -45,7 +45,9 @@ describe('HealthController', () => {
 
     controller = module.get<HealthController>(HealthController);
     healthCheckService = module.get<HealthCheckService>(HealthCheckService);
-    prismaHealthIndicator = module.get<PrismaHealthIndicator>(PrismaHealthIndicator);
+    prismaHealthIndicator = module.get<PrismaHealthIndicator>(
+      PrismaHealthIndicator,
+    );
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
@@ -55,7 +57,7 @@ describe('HealthController', () => {
 
   it('should return uptime information', () => {
     const result = controller.getUptime();
-    
+
     expect(result).toHaveProperty('status', 'ok');
     expect(result).toHaveProperty('uptime');
     expect(result).toHaveProperty('timestamp');
@@ -67,11 +69,11 @@ describe('HealthController', () => {
     const mockQueryRaw = jest.fn().mockResolvedValue('OK');
     Object.defineProperty(prismaService, '$queryRaw', {
       get: () => mockQueryRaw,
-      configurable: true
+      configurable: true,
     });
-    
+
     const result = await controller.getStatus();
-    
+
     expect(result).toHaveProperty('status', 'healthy');
     expect(result).toHaveProperty('database');
     expect(result.database).toHaveProperty('status', 'connected');
@@ -79,14 +81,16 @@ describe('HealthController', () => {
   });
 
   it('should return unhealthy status when database fails', async () => {
-    const mockQueryRaw = jest.fn().mockRejectedValue(new Error('Connection failed'));
+    const mockQueryRaw = jest
+      .fn()
+      .mockRejectedValue(new Error('Connection failed'));
     Object.defineProperty(prismaService, '$queryRaw', {
       get: () => mockQueryRaw,
-      configurable: true
+      configurable: true,
     });
-    
+
     const result = await controller.getStatus();
-    
+
     expect(result).toHaveProperty('status', 'unhealthy');
     expect(result).toHaveProperty('database');
     expect(result.database).toHaveProperty('status', 'disconnected');

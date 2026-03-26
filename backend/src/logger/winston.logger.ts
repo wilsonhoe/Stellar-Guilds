@@ -15,15 +15,17 @@ export class WinstonLogger extends NestLogger {
       winston.format.errors({ stack: true }),
       winston.format.splat(),
       winston.format.json(),
-      winston.format.printf(({ timestamp, level, message, context, ...meta }) => {
-        return JSON.stringify({
-          timestamp,
-          level: level.toUpperCase(),
-          context: context || 'Application',
-          message,
-          ...(Object.keys(meta).length > 0 && { meta }),
-        });
-      }),
+      winston.format.printf(
+        ({ timestamp, level, message, context, ...meta }) => {
+          return JSON.stringify({
+            timestamp,
+            level: level.toUpperCase(),
+            context: context || 'Application',
+            message,
+            ...(Object.keys(meta).length > 0 && { meta }),
+          });
+        },
+      ),
     );
 
     return winston.createLogger({

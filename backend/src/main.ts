@@ -14,7 +14,7 @@ async function bootstrap() {
   const logger = new WinstonLogger('Main');
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
-  
+
   // Apply response standardization globally
   app.useGlobalInterceptors(new ResponseInterceptor());
 
