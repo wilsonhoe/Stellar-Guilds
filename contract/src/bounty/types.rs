@@ -104,6 +104,7 @@ pub struct WorkSubmittedEvent {
 pub struct BountyApprovedEvent {
     pub bounty_id: u64,
     pub approver: Address,
+    pub claimer: Address,
 }
 
 /// Event emitted when escrow is released

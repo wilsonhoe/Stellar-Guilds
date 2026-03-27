@@ -2,7 +2,7 @@ import {
   PaginationQuery,
   PaginationMeta,
   PaginatedResult,
-} from "./pagination.types";
+} from './pagination.types';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -25,11 +25,7 @@ export class PaginationUtil {
   /**
    * Builds pagination metadata
    */
-  static buildMeta(
-    total: number,
-    page: number,
-    limit: number
-  ): PaginationMeta {
+  static buildMeta(total: number, page: number, limit: number): PaginationMeta {
     const totalPages = Math.ceil(total / limit);
 
     return {
@@ -49,7 +45,7 @@ export class PaginationUtil {
     data: T[],
     total: number,
     page: number,
-    limit: number
+    limit: number,
   ): PaginatedResult<T> {
     return {
       data,

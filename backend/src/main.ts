@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { WinstonLogger } from './logger/winston.logger';
+import * as express from 'express';
+import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -14,9 +16,15 @@ async function bootstrap() {
   const logger = new WinstonLogger('Main');
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
-  
+
   // Apply response standardization globally
   app.useGlobalInterceptors(new ResponseInterceptor());
+  app.use(
+    '/uploads',
+    express.static(
+      process.env.STORAGE_LOCAL_DIR || path.join(process.cwd(), 'uploads'),
+    ),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Stellar-Guilds')

@@ -8,7 +8,7 @@ mod integration;
 mod interfaces;
 mod utils;
 use guild::membership::{
-    add_member, create_guild, get_all_members, get_member, has_permission, is_member,
+    add_member, create_guild, get_all_members, get_member, has_permission, is_member, join_guild,
     remove_member, update_role,
 };
 use guild::storage;
@@ -16,8 +16,9 @@ use guild::types::{Member, Role};
 
 mod bounty;
 use bounty::{
-    approve_bounty, approve_completion, cancel_bounty, claim_bounty, create_bounty, expire_bounty,
-    fund_bounty, get_bounty_data, get_guild_bounties_list, release_escrow, submit_work, Bounty,
+    approve_bounty, approve_completion, cancel_bounty, claim_bounty, claim_payout, create_bounty,
+    expire_bounty, fund_bounty, get_bounty_data, get_guild_bounties_list, release_escrow,
+    submit_work, Bounty,
 };
 
 mod treasury;
@@ -522,6 +523,24 @@ impl StellarGuildsContract {
     /// true if the address is a member, false otherwise
     pub fn is_member(env: Env, guild_id: u64, address: Address) -> bool {
         is_member(&env, guild_id, address)
+    }
+
+    /// Join an existing guild as a member
+    ///
+    /// The caller must sign the transaction. They will be added with
+    /// `Role::Member` if not already present.
+    ///
+    /// # Arguments
+    /// * `guild_id` - The ID of the guild to join
+    /// * `caller`   - The address joining (must auth)
+    ///
+    /// # Returns
+    /// true if successful, panics otherwise
+    pub fn join_guild(env: Env, guild_id: u64, caller: Address) -> bool {
+        match join_guild(&env, guild_id, caller) {
+            Ok(result) => result,
+            Err(e) => panic!("{:?}", e),
+        }
     }
 
     /// Check if a member has permission for a required role
@@ -1667,7 +1686,7 @@ impl StellarGuildsContract {
         fund_bounty(&env, bounty_id, funder, amount)
     }
 
-    /// Claim a bounty (first-come-first-served)
+    /// Claim a bounty after approval
     ///
     /// # Arguments
     /// * `bounty_id` - The ID of the bounty to claim
@@ -1677,6 +1696,19 @@ impl StellarGuildsContract {
     /// `true` if claiming was successful
     pub fn claim_bounty(env: Env, bounty_id: u64, claimer: Address) -> bool {
         claim_bounty(&env, bounty_id, claimer)
+    }
+
+    /// Approve a funded bounty for a specific claimer
+    ///
+    /// # Arguments
+    /// * `bounty_id` - The ID of the bounty to approve
+    /// * `approver` - Address of the approver (must be guild admin/owner)
+    /// * `claimer` - Address allowed to claim the bounty
+    ///
+    /// # Returns
+    /// `true` if approval was successful
+    pub fn approve_bounty(env: Env, bounty_id: u64, approver: Address, claimer: Address) -> bool {
+        approve_bounty(&env, bounty_id, approver, claimer)
     }
 
     /// Submit work for a claimed bounty
@@ -1701,19 +1733,6 @@ impl StellarGuildsContract {
     /// `true` if approval was successful
     pub fn approve_completion(env: Env, bounty_id: u64, approver: Address) -> bool {
         approve_completion(&env, bounty_id, approver)
-    }
-
-    /// Approve a funded bounty directly, unlocking escrow claim for the assignee
-    ///
-    /// # Arguments
-    /// * `bounty_id` - The ID of the bounty to approve
-    /// * `approver` - Address of the approver (must be guild admin/owner)
-    /// * `assignee` - Address being assigned to the bounty
-    ///
-    /// # Returns
-    /// `true` if approval was successful
-    pub fn approve_bounty(env: Env, bounty_id: u64, approver: Address, assignee: Address) -> bool {
-        approve_bounty(&env, bounty_id, approver, assignee)
     }
 
     /// Release escrow funds to the bounty claimer
@@ -1748,6 +1767,22 @@ impl StellarGuildsContract {
     /// `true` if bounty was expired and refunded
     pub fn expire_bounty(env: Env, bounty_id: u64) -> bool {
         expire_bounty(&env, bounty_id)
+    }
+
+    /// Claim bounty payout - claimer pulls funds from escrow to their own address
+    ///
+    /// This function allows an approved claimer to claim their payout after the bounty
+    /// completion has been approved. Uses checks-effects-interactions pattern to prevent
+    /// reentrancy attacks.
+    ///
+    /// # Arguments
+    /// * `bounty_id` - The ID of the bounty
+    /// * `claimer` - Address of the claimer claiming the payout (must be the approved claimer)
+    ///
+    /// # Returns
+    /// `true` if payout claim was successful
+    pub fn claim_payout(env: Env, bounty_id: u64, claimer: Address) -> bool {
+        claim_payout(&env, bounty_id, claimer)
     }
 
     /// Get bounty by ID

@@ -62,6 +62,7 @@ pub const ACT_TRANSFERRED: &str = "transferred";
 pub const ACT_MEMBER_ADDED: &str = "member_added";
 pub const ACT_MEMBER_REMOVED: &str = "member_removed";
 pub const ACT_ROLE_UPDATED: &str = "role_updated";
+pub const ACT_JOINED: &str = "joined";
 
 // =========== Bounty-specific actions ===========
 
@@ -98,6 +99,7 @@ pub const ACT_RESOLVED: &str = "resolved";
 
 // =========== Subscription-specific actions ===========
 
+pub const ACT_SUBSCRIBED: &str = "subscribed";
 pub const ACT_PLAN_CREATED: &str = "plan_created";
 pub const ACT_TIER_CHANGED: &str = "tier_changed";
 pub const ACT_PAYMENT_PROCESSED: &str = "payment_ok";

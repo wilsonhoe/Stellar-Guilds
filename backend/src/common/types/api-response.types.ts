@@ -28,7 +28,7 @@ export function createPaginatedResponse<T>(
   statusCode: number = 200,
 ): PaginatedResponse<T> {
   const totalPages = Math.ceil(total / limit);
-  
+
   return {
     data: items,
     meta: {

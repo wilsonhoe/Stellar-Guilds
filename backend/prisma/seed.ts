@@ -1,5 +1,4 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
@@ -16,40 +15,36 @@ async function main() {
   await prisma.guild.deleteMany();
   await prisma.user.deleteMany();
 
-  // Create users
-  const users = await Promise.all([
-    prisma.user.create({
+  // Create 10 dummy users
+  console.log('Seeding users...');
+  const users = [];
+  for (let i = 0; i < 10; i++) {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const user = await prisma.user.create({
       data: {
-        email: 'owner@stellar.io',
-        username: 'owner1',
-        password: 'password',
-        firstName: 'Guild',
-        lastName: 'Owner',
-        bio: 'Owner of the first guild',
+        firstName,
+        lastName,
+        username: `${faker.internet.username({ firstName, lastName })}${i}`,
+        email: faker.internet.email({ firstName, lastName }),
+        password: faker.internet.password(),
+        avatarUrl: faker.image.avatar(),
+        bio: faker.person.bio(),
+        isActive: true,
       },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'contributor@stellar.io',
-        username: 'contributor1',
-        password: 'password',
-        firstName: 'Contributor',
-        lastName: 'One',
-        bio: 'Contributor to guild bounties',
-      },
-    }),
-  ]);
+    });
+    users.push(user);
+  }
 
-  const [owner, contributor] = users;
-
-  // Create guilds
+  // Create guilds with owners
+  console.log('Seeding guilds...');
   const guilds = await Promise.all([
     prisma.guild.create({
       data: {
         name: 'PrivacyGuard',
         slug: 'privacyguard',
         description: 'Focused on privacy protocols and zero-knowledge research',
-        ownerId: owner.id,
+        ownerId: users[0].id,
         avatarUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=privacy',
         bannerUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=privacy-hero',
       },
@@ -59,86 +54,118 @@ async function main() {
         name: 'StellarDesign',
         slug: 'stellardesign',
         description: 'Design-first tooling for cross-chain dApps',
-        ownerId: owner.id,
+        ownerId: users[1].id,
         avatarUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=design',
         bannerUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=design-hero',
       },
     }),
+    prisma.guild.create({
+      data: {
+        name: 'DeFi Builders',
+        slug: 'defi-builders',
+        description: 'Building the future of decentralized finance',
+        ownerId: users[2].id,
+        avatarUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=defi',
+      },
+    }),
   ]);
 
-  // create memberships for owner + contributor
-  const membershipOps: Array<Promise<any>> = [];
-
-  for (const guild of guilds) {
-    membershipOps.push(
-      prisma.guildMembership.create({
-        data: {
-          userId: owner.id,
-          guildId: guild.id,
-          role: 'OWNER',
-          status: 'APPROVED',
-          joinedAt: new Date(),
-        },
-      }),
-    );
-
-    membershipOps.push(
-      prisma.guildMembership.create({
-        data: {
-          userId: contributor.id,
-          guildId: guild.id,
-          role: 'MEMBER',
-          status: 'APPROVED',
-          joinedAt: new Date(),
-        },
-      }),
-    );
-  }
-
-  await Promise.all(membershipOps);
-
-  // Create bounties attached to guilds (open, in progress/claimed, completed)
-  const bountyTemplate: Array<Prisma.BountyCreateInput> = [
-    {
-      title: 'Implement Zero-Knowledge Proof for Voting',
-      description:
-        'Build a robust ZK-proof system using Circom for a DAO governance module. Ensure privacy and scalability.',
-      status: 'OPEN',
-      rewardAmount: new Prisma.Decimal(5000),
-      rewardToken: 'USDC',
-      deadline: new Date(Date.now() + 7 * 24 * 3600 * 1000),
-      creatorId: owner.id,
-      guildId: guilds[0].id,
-    },
-    {
-      title: 'Optimize Landing Page Hero Animation',
-      description:
-        'Improve Three.js hero animation performance and add responsive behavior.',
-      status: 'IN_PROGRESS',
-      rewardAmount: new Prisma.Decimal(1200),
-      rewardToken: 'STR',
-      deadline: new Date(Date.now() + 14 * 24 * 3600 * 1000),
-      creatorId: owner.id,
-      assigneeId: contributor.id,
-      guildId: guilds[1].id,
-    },
-    {
-      title: 'Complete Audit for On-Chain Treasury Workflow',
-      description:
-        'Review all smart-contract hooks and treasury flows for edge cases and replay attack resistance.',
-      status: 'COMPLETED',
-      rewardAmount: new Prisma.Decimal(7500),
-      rewardToken: 'STELLAR',
-      deadline: new Date(Date.now() - 2 * 24 * 3600 * 1000),
-      creatorId: owner.id,
-      assigneeId: contributor.id,
-      guildId: guilds[0].id,
-    },
-  ];
-
-  const bounties = await Promise.all(
-    bountyTemplate.map((bounty) => prisma.bounty.create({ data: bounty })),
+  // Create memberships
+  console.log('Seeding guild memberships...');
+  const memberships = [];
+  
+  // Guild 0: Owner + 4 members
+  memberships.push(
+    prisma.guildMembership.create({
+      data: { userId: users[0].id, guildId: guilds[0].id, role: 'OWNER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[3].id, guildId: guilds[0].id, role: 'ADMIN', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[4].id, guildId: guilds[0].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[5].id, guildId: guilds[0].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[6].id, guildId: guilds[0].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
   );
+
+  // Guild 1: Owner + 3 members
+  memberships.push(
+    prisma.guildMembership.create({
+      data: { userId: users[1].id, guildId: guilds[1].id, role: 'OWNER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[4].id, guildId: guilds[1].id, role: 'MODERATOR', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[7].id, guildId: guilds[1].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[8].id, guildId: guilds[1].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+  );
+
+  // Guild 2: Owner + 2 members
+  memberships.push(
+    prisma.guildMembership.create({
+      data: { userId: users[2].id, guildId: guilds[2].id, role: 'OWNER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[8].id, guildId: guilds[2].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+    prisma.guildMembership.create({
+      data: { userId: users[9].id, guildId: guilds[2].id, role: 'MEMBER', status: 'APPROVED', joinedAt: new Date() },
+    }),
+  );
+
+  await Promise.all(memberships);
+
+  // Create bounties
+  console.log('Seeding bounties...');
+  const bounties = await Promise.all([
+    prisma.bounty.create({
+      data: {
+        title: 'Implement Zero-Knowledge Proof for Voting',
+        description: 'Build a robust ZK-proof system using Circom for a DAO governance module.',
+        status: 'OPEN',
+        rewardAmount: new Prisma.Decimal(5000),
+        rewardToken: 'USDC',
+        deadline: new Date(Date.now() + 7 * 24 * 3600 * 1000),
+        creatorId: users[0].id,
+        guildId: guilds[0].id,
+      },
+    }),
+    prisma.bounty.create({
+      data: {
+        title: 'Optimize Landing Page Hero Animation',
+        description: 'Improve Three.js hero animation performance and add responsive behavior.',
+        status: 'IN_PROGRESS',
+        rewardAmount: new Prisma.Decimal(1200),
+        rewardToken: 'STR',
+        deadline: new Date(Date.now() + 14 * 24 * 3600 * 1000),
+        creatorId: users[1].id,
+        assigneeId: users[4].id,
+        guildId: guilds[1].id,
+      },
+    }),
+    prisma.bounty.create({
+      data: {
+        title: 'Complete Audit for On-Chain Treasury Workflow',
+        description: 'Review all smart-contract hooks and treasury flows for edge cases.',
+        status: 'COMPLETED',
+        rewardAmount: new Prisma.Decimal(7500),
+        rewardToken: 'STELLAR',
+        deadline: new Date(Date.now() - 2 * 24 * 3600 * 1000),
+        creatorId: users[0].id,
+        assigneeId: users[3].id,
+        guildId: guilds[0].id,
+      },
+    }),
+  ]);
 
   console.log(`✅ Seed completed: ${users.length} users, ${guilds.length} guilds, ${bounties.length} bounties created.`);
   console.log('🎉 Finished Prisma seed script.');
@@ -148,38 +175,6 @@ main()
   .catch((error) => {
     console.error('❌ Seed failed:', error);
     process.exitCode = 1;
-  console.log('Seeding 10 dummy users...');
-  
-  for (let i = 0; i < 10; i++) {
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-    const username = faker.internet.username({ firstName, lastName }) + Math.floor(Math.random() * 1000);
-    const email = faker.internet.email({ firstName, lastName });
-    const password = faker.internet.password(); // Can use simple hashed if bcrypt is imported, but faker password is fine
-    const avatarUrl = faker.image.avatar();
-    const bio = faker.person.bio();
-
-    await prisma.user.create({
-      data: {
-        firstName,
-        lastName,
-        username,
-        email,
-        password, // In a real app this should be bcrypt-hashed, but for dummy seeding plain text or fake hashed is fine
-        avatarUrl,
-        bio,
-        isActive: true,
-      },
-    });
-  }
-
-  console.log('Successfully seeded 10 dummy users!');
-}
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();

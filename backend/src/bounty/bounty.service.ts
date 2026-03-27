@@ -34,9 +34,9 @@ export class BountyService {
   async findOne(id: string) {
     const bounty = await this.prisma.bounty.findUnique({
       where: { id },
-      include: { 
-        creator: true, 
-        assignee: true 
+      include: {
+        creator: true,
+        assignee: true,
       },
     });
     if (!bounty) throw new NotFoundException('Bounty not found');
@@ -57,11 +57,11 @@ export class BountyService {
     if (guildId) where.guildId = guildId;
 
     const [items, total] = await Promise.all([
-      this.prisma.bounty.findMany({ 
-        where, 
-        skip: page * size, 
+      this.prisma.bounty.findMany({
+        where,
+        skip: page * size,
         take: size,
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       }),
       this.prisma.bounty.count({ where }),
     ]);

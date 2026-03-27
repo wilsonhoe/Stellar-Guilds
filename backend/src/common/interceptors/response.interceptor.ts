@@ -18,8 +18,14 @@ export interface ApiResponse<T> {
 }
 
 @Injectable()
-export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>> {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse<T>> {
+export class ResponseInterceptor<T> implements NestInterceptor<
+  T,
+  ApiResponse<T>
+> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<ApiResponse<T>> {
     const startTime = Date.now();
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
@@ -30,7 +36,12 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>
         const duration = endTime - startTime;
 
         // Don't wrap if the response is already in the standard format
-        if (data && typeof data === 'object' && 'data' in data && 'meta' in data) {
+        if (
+          data &&
+          typeof data === 'object' &&
+          'data' in data &&
+          'meta' in data
+        ) {
           return data;
         }
 

@@ -14,7 +14,7 @@
 /// | Fund bounty         | `(bounty, funded)`       | `BountyFundedEvent`      |
 /// | Claim bounty        | `(bounty, claimed)`      | `BountyClaimedEvent`     |
 /// | Submit work         | `(bounty, submitted)`    | `WorkSubmittedEvent`     |
-/// | Approve completion  | `(bounty, approved)`     | `BountyApprovedEvent`    |
+/// | Approve bounty      | `(bounty, approved)`     | `BountyApprovedEvent`    |
 /// | Release escrow      | `(bounty, released)`     | `EscrowReleasedEvent`    |
 /// | Cancel bounty       | `(bounty, cancelled)`    | `BountyCancelledEvent`   |
 /// | Expire bounty       | `(bounty, expired)`      | `BountyExpiredEvent`     |
@@ -175,7 +175,7 @@ pub fn fund_bounty(env: &Env, bounty_id: u64, funder: Address, amount: i128) -> 
     true
 }
 
-/// Claim a bounty (first-come-first-served)
+/// Claim a bounty after approval
 ///
 /// # Events emitted
 /// - `(bounty, claimed)`  â†’ `BountyClaimedEvent`
@@ -198,8 +198,14 @@ pub fn claim_bounty(env: &Env, bounty_id: u64, claimer: Address) -> bool {
         panic!("Bounty has expired");
     }
 
-    if bounty.status != BountyStatus::Open && bounty.status != BountyStatus::Funded {
+    if bounty.status != BountyStatus::Open {
         panic!("Bounty is not open for claiming");
+    }
+
+    match bounty.claimer.clone() {
+        Some(approved_claimer) if approved_claimer == claimer => {}
+        Some(_) => panic!("Bounty may only be claimed by the approved address"),
+        None => {}
     }
 
     bounty.status = BountyStatus::Claimed;
@@ -251,11 +257,11 @@ pub fn submit_work(env: &Env, bounty_id: u64, submission_url: String) -> bool {
     true
 }
 
-/// Approve a funded bounty directly, unlocking escrow claim for the assignee
+/// Approve a funded bounty for a specific claimer
 ///
 /// # Events emitted
-/// - `(bounty, approved)` â†’ `BountyApprovedEvent`
-pub fn approve_bounty(env: &Env, bounty_id: u64, approver: Address, assignee: Address) -> bool {
+/// - `(bounty, approved)` → `BountyApprovedEvent`
+pub fn approve_bounty(env: &Env, bounty_id: u64, approver: Address, claimer: Address) -> bool {
     approver.require_auth();
 
     let mut bounty = get_bounty(env, bounty_id).expect("Bounty not found");
@@ -263,13 +269,12 @@ pub fn approve_bounty(env: &Env, bounty_id: u64, approver: Address, assignee: Ad
     if !has_permission(env, bounty.guild_id, approver.clone(), Role::Admin) {
         panic!("Unauthorized: Approver must be a guild admin or owner");
     }
-
     if bounty.status != BountyStatus::Funded {
         panic!("Bounty is not funded");
     }
 
-    bounty.status = BountyStatus::Completed;
-    bounty.claimer = Some(assignee.clone());
+    bounty.status = BountyStatus::Open;
+    bounty.claimer = Some(claimer.clone());
     store_bounty(env, &bounty);
 
     emit_event(
@@ -279,6 +284,7 @@ pub fn approve_bounty(env: &Env, bounty_id: u64, approver: Address, assignee: Ad
         BountyApprovedEvent {
             bounty_id,
             approver,
+            claimer,
         },
     );
 
@@ -286,9 +292,6 @@ pub fn approve_bounty(env: &Env, bounty_id: u64, approver: Address, assignee: Ad
 }
 
 /// Approve completion of a bounty
-///
-/// # Events emitted
-/// - `(bounty, approved)` â†’ `BountyApprovedEvent`
 pub fn approve_completion(env: &Env, bounty_id: u64, approver: Address) -> bool {
     approver.require_auth();
 
@@ -311,6 +314,7 @@ pub fn approve_completion(env: &Env, bounty_id: u64, approver: Address) -> bool 
         BountyApprovedEvent {
             bounty_id,
             approver,
+            claimer: bounty.claimer.expect("No claimer for this bounty"),
         },
     );
 
@@ -450,7 +454,57 @@ pub fn expire_bounty(env: &Env, bounty_id: u64) -> bool {
     true
 }
 
-// â”€â”€â”€ Query helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/// Claim bounty payout - allows claimer to pull funds from escrow to their own address
+///
+/// This is called by the claimer (assignee) after bounty completion approval.
+/// Uses checks-effects-interactions pattern: state is updated first to prevent reentrancy.
+///
+/// # Events emitted
+/// - `(bounty, released)` → `EscrowReleasedEvent`
+pub fn claim_payout(env: &Env, bounty_id: u64, claimer: Address) -> bool {
+    claimer.require_auth();
+
+    if dispute_storage::is_reference_locked(env, &DisputeReference::Bounty, bounty_id) {
+        panic!("Bounty is in active dispute");
+    }
+
+    let mut bounty = get_bounty(env, bounty_id).expect("Bounty not found");
+
+    if bounty.status != BountyStatus::Completed {
+        panic!("Bounty is not completed");
+    }
+
+    let stored_claimer = bounty.claimer.clone().expect("No claimer for this bounty");
+    if stored_claimer != claimer {
+        panic!("Unauthorized: Only the approved claimer can claim payout");
+    }
+
+    // EFFECTS: Update state FIRST to prevent reentrancy
+    let payout_amount = bounty.funded_amount;
+    bounty.funded_amount = 0;
+    store_bounty(env, &bounty);
+
+    // INTERACTIONS: Only transfer after state is updated
+    if payout_amount > 0 {
+        release_funds(env, &bounty.token, &claimer, payout_amount);
+
+        emit_event(
+            env,
+            MOD_BOUNTY,
+            ACT_RELEASED,
+            EscrowReleasedEvent {
+                bounty_id,
+                recipient: claimer,
+                amount: payout_amount,
+                token: bounty.token,
+            },
+        );
+    }
+
+    true
+}
+
+// â"€â"€â"€ Query helpers â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 pub fn get_bounty_data(env: &Env, bounty_id: u64) -> Bounty {
     get_bounty(env, bounty_id).expect("Bounty not found")

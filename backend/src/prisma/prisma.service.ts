@@ -5,17 +5,18 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { createSoftDeleteExtension } from './prisma.extension';
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(PrismaService.name);
-  private prisma: PrismaClient;
+  private prisma: any;
 
   constructor() {
     try {
-      // Create PrismaClient with minimal options
-      const options: any = {};
-      this.prisma = new PrismaClient(options);
+      // Create PrismaClient with soft delete extension
+      const basePrisma = new PrismaClient();
+      this.prisma = createSoftDeleteExtension(basePrisma);
     } catch (error) {
       this.logger.error(`Failed to create PrismaClient: ${error}`);
       throw error;

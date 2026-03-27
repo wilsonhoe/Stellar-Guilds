@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Patch,
   Delete,
   Body,
@@ -13,7 +12,17 @@ import {
   HttpCode,
   HttpStatus,
   BadRequestException,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleGuard } from '../auth/guards/role.guard';
@@ -24,6 +33,7 @@ import {
   SearchUserDto,
   AssignRoleDto,
   UserRole,
+  UserProfileDto,
 } from './dto/user.dto';
 
 @Controller('users')
@@ -51,8 +61,20 @@ export class UserController {
 
   /**
    * Get user profile by ID (public)
+   * Returns user profile excluding sensitive fields like password, email, walletAddress
    */
   @Get(':userId')
+  @ApiOperation({ summary: 'Get user profile by ID (public)' })
+  @ApiParam({ name: 'userId', description: 'User ID (UUID)' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User profile retrieved successfully',
+    type: UserProfileDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'User not found',
+  })
   @HttpCode(HttpStatus.OK)
   async getUserProfile(@Param('userId') userId: string) {
     return this.userService.getUserProfile(userId);
@@ -86,23 +108,20 @@ export class UserController {
 
   /**
    * Upload user avatar
-   * Note: For file upload, use multipart/form-data
-   * In a real scenario, integrate with cloud storage (AWS S3, Cloudinary)
+   * Accepts multipart/form-data with a single "file" field.
    */
   @Post('me/avatar')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
   @HttpCode(HttpStatus.OK)
   async uploadAvatar(
     @Request() req: any,
-    @Body('avatarUrl') avatarUrl: string,
+    @UploadedFile() file: any,
   ) {
-    if (!avatarUrl) {
-      throw new BadRequestException('avatarUrl is required');
+    if (!file?.buffer || !file?.originalname) {
+      throw new BadRequestException('file is required');
     }
-    const result = await this.userService.updateAvatar(
-      req.user.userId,
-      avatarUrl,
-    );
+    const result = await this.userService.updateAvatar(req.user.userId, file);
     return {
       avatarUrl: result.avatarUrl,
       message: 'Avatar updated successfully',

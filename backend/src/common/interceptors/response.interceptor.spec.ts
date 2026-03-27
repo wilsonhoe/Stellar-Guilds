@@ -43,7 +43,11 @@ describe('ResponseInterceptor', () => {
   it('should not wrap responses that are already in standard format', (done) => {
     const standardResponse = {
       data: { message: 'already wrapped' },
-      meta: { timestamp: '2023-01-01T00:00:00.000Z', path: '/test', statusCode: 200 },
+      meta: {
+        timestamp: '2023-01-01T00:00:00.000Z',
+        path: '/test',
+        statusCode: 200,
+      },
     };
 
     const mockContext = {
