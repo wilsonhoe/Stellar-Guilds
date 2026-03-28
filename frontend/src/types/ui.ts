@@ -152,3 +152,16 @@ export interface UploadResult {
   url?: string
   error?: string
 }
+
+export interface Tab {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  content: React.ReactNode;
+}
+
+export interface TabsProps {
+  tabs: Tab[];
+  defaultTab?: string;
+  className?: string;
+}
